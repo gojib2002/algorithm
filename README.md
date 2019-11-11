@@ -20,6 +20,6 @@
 
 * 2019 - 11 - Week3
   * [1단계 / K번째수 (정렬)](https://programmers.co.kr/learn/courses/30/lessons/42748)
-  * [2단계 / 다리를 지나는 트럭(스택/큐)](https://programmers.co.kr/learn/courses/30/lessons/42583)
-  * [3단계 / N으로 표현(동적계획법)](https://programmers.co.kr/learn/courses/30/lessons/42895)
-  * [4단계 / 3*n타일링(연습문제)](https://programmers.co.kr/learn/courses/30/lessons/12902)
+  * [2단계 / 다리를 지나는 트럭 (스택/큐)](https://programmers.co.kr/learn/courses/30/lessons/42583)
+  * [3단계 / N으로 표현 (동적계획법)](https://programmers.co.kr/learn/courses/30/lessons/42895)
+  * [4단계 / 3 x n 타일링 (연습문제)](https://programmers.co.kr/learn/courses/30/lessons/12902)
