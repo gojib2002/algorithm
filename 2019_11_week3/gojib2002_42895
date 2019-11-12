@@ -1,0 +1,152 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+#define INF 1000000000
+
+//DP로 접근하려다가 완전탐색으로 가능할듯 해서 시도.
+//코드 완성할때쯤 다시 계산해보니 시간 안에 들어오는게 불가능하다는걸 알게됨....
+//n을 8번 사용하는 경우는 7번 사용해서 만들 수 있는 수 *5, +5, -5, /5들로 구성된다는걸 이용해서 7번까지만 완전탐색 돌리고 8번 사용하는건 7번 사용하는 경우에서 +5, -5, /5, *5를 만들 수 있는지 판단하는걸로 돌려버리니 통과.
+//DP문제는 DP로 풉시다.....
+
+int n;
+int num;
+int arr[10];
+int answer = 10;
+int order[10];
+bool visited[10];
+vector<int> v;
+long long number[10];
+bool flag;
+
+long long len(long long x)
+{
+    long long ret = 1;
+    
+    while(x)
+    {
+        ret *= 10;
+        x /= 10;
+    }
+    
+    return ret;
+}
+
+bool calc()
+{
+    int i;
+    int a, b;
+    
+    for(i=0;i<v.size();i++)
+    {
+        a = order[i];
+        b = order[i]+1;
+        while(number[a] == INF) a--;
+        while(number[b] == INF) b++;
+            
+        if(arr[order[i]] == 1) number[a] = number[a]*number[b];
+        else if(arr[order[i]] == 2 && number[b] != 0) number[a] = number[a]/number[b];
+        else if(arr[order[i]] == 2 && number[b] == 0) return false;
+        else if(arr[order[i]] == 3) number[a] = number[a]+number[b];
+        else number[a] = number[a]-number[b];
+            
+        number[b] = INF;
+    }
+    
+    if(number[0] + n == num) flag = true;
+    if(number[0] * n == num) flag = true;
+    if(number[0] - n == num) flag = true;
+    if(number[0] / n == num) flag = true;
+    
+    return number[0] == num;
+}
+
+bool get_order(int cur)
+{
+    int i;
+    long long temp[10];
+    bool ret = false;
+    
+    if(cur == v.size())
+    {
+        for(i=0;i<10;i++) temp[i] = number[i];
+        
+        ret = calc();
+        
+        for(i=0;i<10;i++) number[i] = temp[i];
+        
+        return ret;
+    }
+    
+    for(i=0;i<v.size();i++)
+    {
+        if(visited[i]) continue;
+        
+        order[cur] = v[i];
+        visited[i] = true;
+        
+        ret |= get_order(cur+1);
+        
+        visited[i] = false;
+    }
+    
+    return ret;
+}
+
+bool check(int cur)
+{
+    int i;
+    
+    for(i=0;i<10;i++) number[i] = n;
+    
+    for(i=cur - 1;i >= 0;i--)
+    {
+        if(arr[i] == 0)
+        {
+            number[i] = number[i] * len(number[i+1]) + number[i+1];
+            number[i+1] = INF;
+        }
+    }
+    return get_order(0);
+}
+
+void recur(int cur)
+{
+    int i;
+    
+    if(cur >= answer) return;
+    
+    flag = false;
+    if(check(cur))
+    {
+        answer = min(answer, cur + 1);
+        return;
+    }
+    
+    if(flag)
+    {
+        answer = min(answer, cur + 2);
+    }
+    if(cur == 6) return;
+    
+    for(i=0;i<5;i++)
+    {
+        if(i) v.push_back(cur);
+        
+        arr[cur] = i;
+        recur(cur+1);
+        
+        if(i) v.pop_back();
+    }
+}
+
+int solution(int N, int number) {
+    n = N;
+    num = number;
+    
+    recur(0);
+    
+    if(answer == 10) return -1;
+    else return answer;
+}
