@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+#define MOD 1000000007
+
+//2Xn타일링과 거의 같은 문제
+//가장 오른쪽 아래 타일이 ㅡ인 경우와 ㅣ인 경우로 나눠서 생각한다면, ㅡ인 경우는 다시 그 오른쪽위 타일이 ㅣ인 경우와 ㅡ인 경우로 나뉘고... 이런걸 생각해보면 총5가지 경우가 나온다.
+//그중 세개는 dp[i-2]와 같은 경우, 두개는 dp[i-4] + dp[i-6] + dp[i-8]... + 1임을 알 수 있다.
+
+int solution(int n) {
+    long long dp[5001];
+    int i, j;
+    
+    dp[1] = 0;
+    dp[2] = 3;
+    dp[3] = 0;
+    dp[4] = 11;
+    for(i=6;i<=n;i++)
+    {
+        if(i%2==1) dp[i] = 0;
+        else
+        {
+            dp[i] = (dp[i-2] * 3 + 2) % MOD;
+            for(j=2;j<i-2;j+=2) dp[i] = (dp[i] + 2 * dp[j]) % MOD;
+        }
+    }
+    
+    return dp[n];
+}
